@@ -3,21 +3,44 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WinFormsApp1;
 
-List<Subscriber> emailSubscribers = new List<Subscriber>();
-List<Subscriber> mobileSubscribers = new List<Subscriber>();
+
 
 namespace WinFormsApp1
 {
+    using System.Collections.Generic;
+
+    public class NotificationManager
+    {
+        public List<string> emailSubscribers = new List<string>();
+        public List<string> mobileSubscribers = new List<string>();
+    }
+
+
     public class Subscriber
     {
-        public string Email { get; set; }
+        NotificationManager notificationManager = new NotificationManager();
+        public string notificationLabel;
+
+        public string Email { get; set; } 
         public string Mobile { get; set; }
+ 
 
 
-        public delegate void SendViaEmail(string email, string message);
-        public delegate void SendViaMobile(string mobile, string message);
+        //public delegate void SendViaEmail(string email, string message);
+        //public delegate void SendViaMobile(string mobile, string message);
+        private void SendViaEmail(string message, List<string> subscribers)
+        {
+            string subscriberList = string.Join(", ", subscribers.Select(subscriber => subscriber));
+            //notificationLabel.Text = $"Email sent to: {subscriberList}\nMessage: {message}";
+        }
 
-        private void Subscribe(string email, string mobile)
+        private void SendViaMobile(string message, List<string> subscribers)
+        {
+            string subscriberList = string.Join(", ", subscribers.Select(subscriber => subscriber));
+            //notificationLabel.Text = $"Text message sent to: {subscriberList}\nMessage: {message}";
+        }
+
+        public void Subscribe(string email, string mobile)
         {
             bool isEmailValid = ValidateEmail(email);
             bool isMobileValid = ValidateMobile(mobile);
@@ -28,7 +51,7 @@ namespace WinFormsApp1
                 return;
             }
 
-            if (emailSubscribers.Any(s => s.Email == email) || mobileSubscribers.Any(s => s.Mobile == mobile))
+            if (notificationManager.emailSubscribers.Any(s => s == email) || notificationManager.mobileSubscribers.Any(s => s == mobile))
             {
                 MessageBox.Show("You have already subscribed.");
                 return;
@@ -36,38 +59,38 @@ namespace WinFormsApp1
 
             if (isEmailValid)
             {
-                emailSubscribers.Add(new Subscriber { Email = email });
+                notificationManager.emailSubscribers.Add(email);
             }
 
             if (isMobileValid)
             {
-                mobileSubscribers.Add(new Subscriber { Mobile = mobile });
+                notificationManager.mobileSubscribers.Add(mobile);
             }
         }
 
-        private void Unsubscribe(string email, string mobile)
+        public void Unsubscribe(string email, string mobile)
         {
-            if (emailSubscribers.Remove(emailSubscribers.FirstOrDefault(s => s.Email == email)))
+            if (notificationManager.emailSubscribers.Remove(notificationManager.emailSubscribers.FirstOrDefault(s => s == email)))
             {
                 MessageBox.Show("You have been unsubscribed from email notification.");
             }
 
-            if (mobileSubscribers.Remove(mobileSubscribers.FirstOrDefault(s => s.Mobile == mobile)))
+            if (notificationManager.mobileSubscribers.Remove(notificationManager.mobileSubscribers.FirstOrDefault(s => s == mobile)))
             {
                 MessageBox.Show("You have been unsubscribed from mobile notification.");
             }
         }
 
-        private void SendNotification(string message)
+        public void SendNotification(string message)
         {
-            foreach (var subscriber in emailSubscribers)
+            foreach (var subscriber in notificationManager.emailSubscribers)
             {
-                SendViaEmail?.Invoke(subscriber.Email, message);
+                SendViaEmail(message, notificationManager.emailSubscribers);
             }
 
-            foreach (var subscriber in mobileSubscribers)
+            foreach (var subscriber in notificationManager.mobileSubscribers)
             {
-                SendViaMobile?.Invoke(subscriber.Mobile, message);
+                SendViaMobile(message, notificationManager.mobileSubscribers);
             }
         }
 
@@ -93,7 +116,7 @@ namespace WinFormsApp1
             return regex.IsMatch(mobile);
         }
 
-
+    
 
     }
 

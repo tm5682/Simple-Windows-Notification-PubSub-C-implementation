@@ -51,6 +51,7 @@
             this.Publish_Notification.TabIndex = 1;
             this.Publish_Notification.Text = "Publish Notification";
             this.Publish_Notification.UseVisualStyleBackColor = true;
+            this.Publish_Notification.Click += new System.EventHandler(this.Publish_Notification_Click);
             // 
             // Exit
             // 
@@ -65,12 +66,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(868, 120);
+            this.ClientSize = new System.Drawing.Size(868, 175);
             this.Controls.Add(this.Exit);
             this.Controls.Add(this.Publish_Notification);
             this.Controls.Add(this.Manage_Subscription);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 
         }
