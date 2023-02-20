@@ -25,8 +25,9 @@ namespace WinFormsApp1
         public Form2()
         {
             InitializeComponent();
-            label3.Text = "Email List " + notificationManager.emailSubscribers.ToString();
-            label4.Text = "Mobile List" + notificationManager.mobileSubscribers.ToString();
+            label3.Text = "Email List " + notificationManager.emailSubscribers.Count.ToString();
+           
+            label4.Text = "Mobile List" + notificationManager.mobileSubscribers.Count.ToString();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -73,10 +74,14 @@ namespace WinFormsApp1
                 }
                 else
                 {
-                    label1.Text = " Valid Email";
+                    label1.Text = "Valid Email";
 
                     // Add the new subscriber to the emailSubscribers list
                     notificationManager.emailSubscribers.Add(textBox1.Text);
+
+                    label1.Text = "Saved as new Email Subscriber"
+
+                     form1.Publish_Notification.Enabled = true;
                 }
 
             }
@@ -93,6 +98,12 @@ namespace WinFormsApp1
                 {
                     label2.Text = " Valid Mobile";
                     notificationManager.mobileSubscribers.Add(textBox2.Text);
+
+                    label2.Text = "Saved as new Mobile Subscriber";
+
+                    Form1 form1 = new Form1();
+
+                    form1.Publish_Notification.Enabled = true;
                 }
 
             }

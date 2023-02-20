@@ -25,7 +25,11 @@ namespace WinFormsApp1
         private void Publish_Notification_Click(object sender, EventArgs e)
         {
 
-           
+            if (notificationManager.mobileSubscribers.Count == 0 && notificationManager.emailSubscribers.Count == 0)
+            {
+                Publish_Notification.Enabled = false;
+            }
+
             Form3 form3 = new Form3();
             form3.Show();
         }
